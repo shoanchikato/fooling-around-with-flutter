@@ -3,33 +3,20 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(
     MaterialApp(
-      home: AwesomeButton(),
+      home: HomePage(),
+      routes: <String, WidgetBuilder>{
+        "/SecondPage": (BuildContext context) => SecondPage()
+      },
     ),
   );
 }
 
-class AwesomeButton extends StatefulWidget {
-  @override
-  AwesomeButtonState createState() => AwesomeButtonState();
-}
-
-class AwesomeButtonState extends State<AwesomeButton> {
-  int counter = 0;
-  List<String> strings = ["Flutter", "Is", "Awesome"];
-  String displayString = "";
-
-  void onPressed() {
-    setState(() {
-      displayString = strings[counter];
-      counter = counter < 2 ? ++counter : 0;
-    });
-  }
-
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Stateful Widget!"),
+        title: Text("Home"),
         backgroundColor: Colors.deepOrange,
       ),
       body: Container(
@@ -37,28 +24,39 @@ class AwesomeButtonState extends State<AwesomeButton> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                displayString,
-                style: TextStyle(
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.bold,
-                ),
+              IconButton(
+                icon: Icon(Icons.favorite, color: Colors.redAccent),
+                iconSize: 70.0,
+                onPressed: () {Navigator.of(context).pushNamed("/SecondPage");},
               ),
-              Padding(
-                padding: EdgeInsets.all(10.0),
+              Text("Home"),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SecondPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Second Page"),
+        backgroundColor: Colors.deepOrange,
+      ),
+      body: Container(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.home, color: Colors.blue),
+                iconSize: 70.0,
+                onPressed: null,
               ),
-              RaisedButton(
-                child: Text(
-                  "Press Me!",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 20.0,
-                  ),
-                ),
-                color: Colors.red,
-                onPressed: onPressed,
-              ),
+              Text("Second Page"),
             ],
           ),
         ),
