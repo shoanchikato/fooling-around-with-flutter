@@ -1,49 +1,80 @@
 import 'package:flutter/material.dart';
+import './FirstPage.dart' as first;
+import './SecondPage.dart' as second;
+import './ThirdPage.dart' as third;
 
 void main() {
   runApp(
-    MaterialApp(
-      home: MyTextInput(),
-    ),
+    MaterialApp(home: MyTabs()),
   );
 }
 
-class MyTextInput extends StatefulWidget {
+class MyTabs extends StatefulWidget {
   @override
-  MyTextInputState createState() => MyTextInputState();
+  MyTabsState createState() => MyTabsState();
 }
 
-class MyTextInputState extends State<MyTextInput> {
-  final TextEditingController controller = TextEditingController();
+class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
+  TabController controller;
 
-  String result = "";
+  @override
+  void initState() {
+    super.initState();
+    controller = TabController(vsync: this, length: 3);
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Input Text"),
-          backgroundColor: Colors.deepOrange,
-        ),
-        body: Container(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                TextField(
-                  decoration: InputDecoration(hintText: "Type in here!"),
-                  onSubmitted: (String str) {
-                    setState(() {
-                      result = result + "\n" + str;
-                    });
-                    controller.text = "";
-                  },
-                  controller: controller,
-                ),
-                Text(result),
-              ],
+      appBar: AppBar(
+        title: Text("Pages"),
+        backgroundColor: Colors.deepOrange,
+        bottom: TabBar(
+          controller: controller,
+          tabs: <Tab>[
+            Tab(
+              icon: Icon(Icons.arrow_forward),
             ),
-          ),
-        ));
+            Tab(
+              icon: Icon(Icons.arrow_downward),
+            ),
+            Tab(
+              icon: Icon(Icons.arrow_back),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Material(
+        color: Colors.deepOrange,
+        child: TabBar(
+          controller: controller,
+          tabs: <Tab>[
+            Tab(
+              icon: Icon(Icons.arrow_forward),
+            ),
+            Tab(
+              icon: Icon(Icons.arrow_downward),
+            ),
+            Tab(
+              icon: Icon(Icons.arrow_back),
+            ),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: controller,
+        children: <Widget>[
+          first.First(),
+          second.Second(),
+          third.Third(),
+        ],
+      ),
+    );
   }
 }
