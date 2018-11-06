@@ -3,64 +3,47 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(
     MaterialApp(
-      home: HomePage(),
-      routes: <String, WidgetBuilder>{
-        "/SecondPage": (BuildContext context) => SecondPage()
-      },
+      home: MyTextInput(),
     ),
   );
 }
 
-class HomePage extends StatelessWidget {
+class MyTextInput extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Home"),
-        backgroundColor: Colors.deepOrange,
-      ),
-      body: Container(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.favorite, color: Colors.redAccent),
-                iconSize: 70.0,
-                onPressed: () {Navigator.of(context).pushNamed("/SecondPage");},
-              ),
-              Text("Home"),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  MyTextInputState createState() => MyTextInputState();
 }
 
-class SecondPage extends StatelessWidget {
+class MyTextInputState extends State<MyTextInput> {
+  final TextEditingController controller = TextEditingController();
+
+  String result = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Second Page"),
-        backgroundColor: Colors.deepOrange,
-      ),
-      body: Container(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.home, color: Colors.blue),
-                iconSize: 70.0,
-                onPressed: null,
-              ),
-              Text("Second Page"),
-            ],
-          ),
+        appBar: AppBar(
+          title: Text("Input Text"),
+          backgroundColor: Colors.deepOrange,
         ),
-      ),
-    );
+        body: Container(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                TextField(
+                  decoration: InputDecoration(hintText: "Type in here!"),
+                  onSubmitted: (String str) {
+                    setState(() {
+                      result = result + "\n" + str;
+                    });
+                    controller.text = "";
+                  },
+                  controller: controller,
+                ),
+                Text(result),
+              ],
+            ),
+          ),
+        ));
   }
 }
