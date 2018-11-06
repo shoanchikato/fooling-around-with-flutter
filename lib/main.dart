@@ -3,65 +3,64 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(
     MaterialApp(
-      home: MyStatelessWidget(),
+      home: AwesomeButton(),
     ),
   );
 }
 
-class MyStatelessWidget extends StatelessWidget {
+class AwesomeButton extends StatefulWidget {
+  @override
+  AwesomeButtonState createState() => AwesomeButtonState();
+}
+
+class AwesomeButtonState extends State<AwesomeButton> {
+  int counter = 0;
+  List<String> strings = ["Flutter", "Is", "Awesome"];
+  String displayString = "";
+
+  void onPressed() {
+    setState(() {
+      displayString = strings[counter];
+      counter = counter < 2 ? ++counter : 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Stateless Widget'),
+        title: Text("Stateful Widget!"),
+        backgroundColor: Colors.deepOrange,
       ),
       body: Container(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            MyCard(
-              title: Text(
-                "I love Flutter!",
-                style: TextStyle(fontSize: 25.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                displayString,
+                style: TextStyle(
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              icon: Icon(Icons.favorite, size: 40.0, color: Colors.redAccent),
-            ),
-            MyCard(
-              title: Text(
-                "I love donuts",
-                style: TextStyle(fontSize: 25.0),
+              Padding(
+                padding: EdgeInsets.all(10.0),
               ),
-              icon: Icon(Icons.donut_large, size: 40.0, color: Colors.brown),
-            ),
-            MyCard(
-              title: Text(
-                "I see you!",
-                style: TextStyle(fontSize: 25.0),
+              RaisedButton(
+                child: Text(
+                  "Press Me!",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontStyle: FontStyle.italic,
+                    fontSize: 20.0,
+                  ),
+                ),
+                color: Colors.red,
+                onPressed: onPressed,
               ),
-              icon: Icon(Icons.visibility, size: 40.0, color: Colors.blue),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class MyCard extends StatelessWidget {
-  MyCard({this.title, this.icon});
-
-  final Widget title;
-  final Widget icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(bottom: 20.0),
-      child: Card(
-        child: Container(
-          padding: EdgeInsets.all(10.0),
-          child: Column(children: <Widget>[this.title, this.icon]),
+            ],
+          ),
         ),
       ),
     );
