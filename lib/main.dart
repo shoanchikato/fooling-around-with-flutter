@@ -17,27 +17,36 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  List data;
 
   Future<String> getData() async {
     http.Response response = await http.get(
-      Uri.encodeFull("https://jsonplaceholder.typicode.com/posts"),
-      headers: {
-        "Accept": "application/json"
-      }
-    );
-    List posts = JSON.decode(response.body);
-    print(posts[1]["title"]);
+        Uri.encodeFull("https://jsonplaceholder.typicode.com/posts"),
+        headers: {"Accept": "application/json"});
+
+    this.setState(() => data = JSON.decode(response.body));
+
+    print(data[1]["title"]);
+    return "Success!";
+  }
+
+  @override
+  void initState() {
+    this.getData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: RaisedButton(
-          child: Text("Get Data"),
-          onPressed: getData,
-        ),
+      appBar: AppBar(
+        title: Text("ListView"),
       ),
+      body: ListView.builder(
+          itemCount: data == null ? 0 : data.length,
+          itemBuilder: (BuildContext context, int index) => Card(
+              child: Text(data[index]["title"]),
+            ),
+          ),
     );
   }
 }
