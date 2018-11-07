@@ -1,79 +1,42 @@
 import 'package:flutter/material.dart';
-import './FirstPage.dart' as first;
-import './SecondPage.dart' as second;
-import './ThirdPage.dart' as third;
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 void main() {
   runApp(
-    MaterialApp(home: MyTabs()),
+    MaterialApp(
+      home: HomePage(),
+    ),
   );
 }
 
-class MyTabs extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  MyTabsState createState() => MyTabsState();
+  HomePageState createState() => HomePageState();
 }
 
-class MyTabsState extends State<MyTabs> with SingleTickerProviderStateMixin {
-  TabController controller;
+class HomePageState extends State<HomePage> {
 
-  @override
-  void initState() {
-    super.initState();
-    controller = TabController(vsync: this, length: 3);
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
+  Future<String> getData() async {
+    http.Response response = await http.get(
+      Uri.encodeFull("https://jsonplaceholder.typicode.com/posts"),
+      headers: {
+        "Accept": "application/json"
+      }
+    );
+    List posts = JSON.decode(response.body);
+    print(posts[1]["title"]);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Pages"),
-        backgroundColor: Colors.deepOrange,
-        bottom: TabBar(
-          controller: controller,
-          tabs: <Tab>[
-            Tab(
-              icon: Icon(Icons.arrow_forward),
-            ),
-            Tab(
-              icon: Icon(Icons.arrow_downward),
-            ),
-            Tab(
-              icon: Icon(Icons.arrow_back),
-            ),
-          ],
+      body: Center(
+        child: RaisedButton(
+          child: Text("Get Data"),
+          onPressed: getData,
         ),
-      ),
-      bottomNavigationBar: Material(
-        color: Colors.deepOrange,
-        child: TabBar(
-          controller: controller,
-          tabs: <Tab>[
-            Tab(
-              icon: Icon(Icons.arrow_forward),
-            ),
-            Tab(
-              icon: Icon(Icons.arrow_downward),
-            ),
-            Tab(
-              icon: Icon(Icons.arrow_back),
-            ),
-          ],
-        ),
-      ),
-      body: TabBarView(
-        controller: controller,
-        children: <Widget>[
-          first.First(),
-          second.Second(),
-          third.Third(),
-        ],
       ),
     );
   }
